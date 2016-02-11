@@ -1,4 +1,6 @@
 
+import math
+
 class Position:
 
     def __init__(self, r, c):
@@ -40,6 +42,17 @@ class Drone(Position):
         self.commandqueue = []
 
     def ends_in(self):
+        position = self
+        time = 0
+        for command in self.commandqueue:
+            time += command.time(position)
+            position = command.position() or position
+        return (time, position)
+
+    def ends_in_target(self, position):
+        time, loc = self.ends_in()
+        return time + position.distance(loc)
+
 
 class MovingCommand:
     def time(self, starting_position):
@@ -75,3 +88,5 @@ class Wait:
         self._time = time
     def time(self, starting_position):
         return self._time
+    def position(self):
+        return None;
