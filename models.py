@@ -21,8 +21,8 @@ class Warehouse(Position):
         self.code = code
 
         from main import SETTINGS
-        self.stock = dict(SETTINGS['products'][code], amount)
-                          for code, amount in enumerate(self.content)]
+        self.stock = dict((SETTINGS['products'][code], amount)
+                          for code, amount in enumerate(self.content))
 
 
 @functools.total_ordering
