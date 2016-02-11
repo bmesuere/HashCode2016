@@ -1,6 +1,7 @@
 import heapq
 import math
 import functools
+from functs import fullfills_needs
 
 
 class Position:
@@ -129,9 +130,7 @@ class OrderQueue:
         return heapq.heappop(self.queue)
 
     def priority(self, order):
-        has_needs = all(stock - need for stock, need in
-                        zip(self.base_warehouse.stock, order.content))
-        if has_needs:
+        if fullfills_needs(order, self.base_warehouse):
             return order.distance(self.base_warehouse)
 
         return self.max_distance
