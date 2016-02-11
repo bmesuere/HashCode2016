@@ -34,6 +34,7 @@ def solve():
                 ))
                 drone_carry.append((product, load_amount))
                 drone_weight += load_amount * product.weight
+                warehouses[0].stock[product] -= load_amount
                 if load_amount == count:
                     for p, c in drone_carry:
                         drone.commandqueue.append(Deliver(current_order, p, c))
