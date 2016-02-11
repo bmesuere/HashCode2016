@@ -97,10 +97,16 @@ class Drone(Position):
                    for product, amount in self.load.items())
 
     def add_load(self, product, amount=1):
+        from main import SETTINGS
         self.load[product] += amount
         if self.load_weight():
             self.load[product] -= amount
             raise ValueError('too much load')
+        self.commandqueue.append(Load(
+            SETTINGS['warehouses'][0],
+            SETTINGS['products'][product],
+            amount
+        ))
 
     def clear_load(self):
         self.load = Counter()
