@@ -28,6 +28,15 @@ class Order(Position):
         self.code = code
         self.content = content
 
+    def weight(self):
+        from main import SETTINGS
+        return sum(amount * SETTINGS['products'][code]
+                   for code, amount in enumerate(self.content))
+
+    def products(self):
+        return dict((code, amount)
+                    for code, amount in enumerate(self.content))
+
     def __lt__(self, other):
         return True
 
