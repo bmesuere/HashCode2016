@@ -32,13 +32,9 @@ def parse():
     order_queue = OrderQueue(n_rows, n_cols, warehouses[0], orders)
 
     SETTINGS.update(n_rows=n_rows, n_cols=n_cols, n_turns=n_turns,
-                    max_payload=max_payload, drones=drones, products=producs,
-                    warehouse=warehouses, orders=orders,
+                    max_payload=max_payload, drones=drones, products=products,
+                    warehouses=warehouses, orders=orders,
                     order_queue=order_queue)
-
-    return (n_rows, n_cols, n_turns, max_payload, drones, products, warehouses,
-            orders, order_queue)
-
 
 def _frequency_table(n_product_types, list_):
     counter = Counter(list_)
@@ -50,9 +46,3 @@ def _int_list():
     return tuple(int(x) for x in input().strip().split())
 
 
-if __name__ == "__main__":
-    drones = solve(*parse())
-    print(sum(len(d.commandqueue) for d in drones))
-    for d in enumerate(drones):
-        for c in d.commandqueue:
-            print(d.code, c)
