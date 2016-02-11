@@ -29,7 +29,7 @@ def parse():
         needs = tuple(_frequency_table(n_product_types, _int_list()))
         orders.append(Order(i, r, c, needs))
 
-    order_queue = OrderQueue(warehouses[0], orders)
+    order_queue = OrderQueue(n_rows, n_cols, warehouses[0], orders)
 
     SETTINGS.update(n_rows=n_rows, n_cols=n_cols, n_turns=n_turns,
                     max_payload=max_payload, drones=drones, products=products,

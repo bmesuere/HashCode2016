@@ -129,21 +129,23 @@ class Wait:
         return " ".join(('W', str(self.time(None))))
 
 class OrderQueue:
-    def __init__(self, base_warehouse, orders):
+    def __init__(self, n_rows, n_cols, base_warehouse, orders):
+        self.max_distance = (n_rows**2 + n_cols**2) ** .5
         self.base_warehouse = base_warehouse
-        self.queue = [(self.priority(order), order)
-                      for order in self.filter(orders)]
+        self.queue = [(self.priority(order), order) for order in orders]
         heapq.heapify(self.queue)
 
     def pop(self):
-        return heapq.heappop(self.queue)
-
-    def filter(self, orders):
-        return [order for order in orders
-                if fullfills_needs(order, self.base_warehouse)]
+        priority, warehouse = heapq.heappop(self.queue)
+        if priority == self.max_distance:
+            raise IndexError
+        return warehouse
 
     def priority(self, order):
-        return order.distance(self.base_warehouse)
+        if fullfills_needs(order, self.base_warehouse):
+            return order.distance(self.base_warehouse)
+
+        return self.max_distance
 
     def __bool__(self):
         return self.empty()
