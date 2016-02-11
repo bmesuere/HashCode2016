@@ -144,5 +144,14 @@ class OrderQueue:
 
         return self.max_distance
 
+    def __bool__(self):
+        return self.empty()
+
+    def empty(self):
+        return len(self.queue) == 0
+
+    def recalculate(self):
+        heapq.heapify(self.queue)
+
     def __repr__(self):
         return repr(self.queue)
