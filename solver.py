@@ -10,11 +10,11 @@ def solve():
 
     dronesi = iter(drones)
 
-    current_order = order_queue.pop()[1]
+    current_order = order_queue.pop()
     drone = next(dronesi)
     drone_weight = 0
     drone_carry = []
-    for product, count in current_order.products.items():
+    for product, count in current_order.products().items():
         while count > 0:
             load_amount = min([count, (SETTINGS['max_payload'] - drone_weight) // product.weight])
             drone.commandqueue.append(Load(
