@@ -84,8 +84,8 @@ class Deliver(MovingCommand):
     def position(self):
         return self.order
     def __str__(self):
-        return " ".join("D", self.order.code, self.product.code,
-                self.count)
+        return " ".join(map(str, ("D", self.order.code, self.product.code,
+                self.count)))
 
 class Load(MovingCommand):
     def __init__(self, warehouse, product, count):
@@ -95,8 +95,8 @@ class Load(MovingCommand):
     def position(self):
         return self.warehouse
     def __str__(self):
-        return " ".join("L", self.warehouse.code, self.product.code,
-                self.count)
+        return " ".join(map(str, ("L", self.warehouse.code, self.product.code,
+                self.count)))
 
 class Unload(MovingCommand):
     def __init__(self, warehouse, product, count):
@@ -106,8 +106,8 @@ class Unload(MovingCommand):
     def position(self):
         return self.warehouse
     def __str__(self):
-        return " ".join("U", self.warehouse.code, self.product.code,
-                self.count)
+        return " ".join(map(str, ("U", self.warehouse.code, self.product.code,
+                self.count)))
 
 class Wait:
     def __init__(self, time):
@@ -117,7 +117,7 @@ class Wait:
     def position(self):
         return None;
     def __str__(self):
-        return " ".join('W', self.time)
+        return " ".join(('W', str(self.time(None))))
 
 class OrderQueue:
     def __init__(self, n_rows, n_cols, base_warehouse, orders):
