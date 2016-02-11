@@ -8,17 +8,17 @@ class Position:
     def distance(self, that):
         return ((self.r - that.r) ** 2 + (self.c - that.c) ** 2) ** 0.5
 
-class WareHouse(Position):
+class Warehouse(Position):
 
-    def __init__(self, r, c):
+    def __init__(self, r, c, stock):
         super().__init__(r, c)
-        self.stock = dict()
+        self.stock = stock
 
 class Order(Position):
 
-    def __init__(self, r, c):
+    def __init__(self, r, c, content):
         super().__init__(r, c)
-        self.content = dict()
+        self.content = content
 
 class Product:
 
