@@ -7,15 +7,35 @@ def solve():
     order_queue = SETTINGS['order_queue']
     warehouses = SETTINGS['warehouses']
     products = SETTINGS['products']
-    drones[0].commandqueue.append(Wait(3))
-    drones[0].commandqueue.append(Deliver(order_queue.pop()[1],
-        products[0], 3))
-    return drones
+
+    dronesi = iter(drones)
+
+    current_order = order_queue.pop()[1]
+    drone = next(dronesi)
+    drone_weight = 0
+    drone_carry = []
+    for product, count in current_order.products.items():
+        while count > 0:
+            load_amount = min([count, (SETTINGS['max_payload'] - drone_weight) // product.weight])
+            drone.commandqueue.append(Load(
+                warehouses[0],
+                product,
+                load_amount
+            ))
+            drone_carry.append(product, load_amount)
+            drone_weight += load_amount * product.weight
+            if load_amount == count:
+                for p, c in drone_carry:
+                    drone.commandqueue.append(Deliver(current_order, p, c))
+                drone = next(dronesi)
+                drone_weight = 0
+                drone_carry = []
+            count -= load_amount
 
 if __name__ == "__main__":
     parse()
-    drones = solve()
+    solve()
     print(sum(len(d.commandqueue) for d in drones))
-    for d in drones:
+    for d in SETTINGS['drones']:
         for c in d.commandqueue:
             print(d.code, c)
