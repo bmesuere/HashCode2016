@@ -1,6 +1,7 @@
 import heapq
 import math
 import functools
+from itertools import Counter
 from functs import fullfills_needs
 
 
@@ -30,7 +31,7 @@ class Order(Position):
 
     def weight(self):
         from main import SETTINGS
-        return sum(amount * SETTINGS['products'][code]
+        return sum(amount * SETTINGS['products'][code].weight
                    for code, amount in enumerate(self.content))
 
     def products(self):
@@ -67,6 +68,8 @@ class Drone(Position):
         super().__init__(r, c)
         self.code = code
         self.commandqueue = []
+        # Frequency table of products: Mapping product -> amount
+        self.load = Counter()
 
     def ends_in(self):
         position = self
@@ -79,6 +82,20 @@ class Drone(Position):
     def ends_in_target(self, position):
         time, loc = self.ends_in()
         return time + position.distance(loc)
+
+    def load_weight(self):
+        from main import SETTINGS
+        return sum(amount * SETTINGS['products'][code].weight
+                   for code, amount in enumerate(self.content))
+
+    def add_load(self, product, amount=1):
+        self.load[product] += amount
+        if self.load_weight():
+            self.load[product] -= amount
+            raise ValueError('too much load')
+
+    def clear_load(self)
+        self.load = Counter()
 
 
 class MovingCommand:
