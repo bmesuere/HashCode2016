@@ -1,5 +1,7 @@
 from collections import Counter
 from models import *
+from functs import *
+from solver import *
 
 SETTINGS = dict()
 
@@ -49,4 +51,8 @@ def _int_list():
 
 
 if __name__ == "__main__":
-    print(parse())
+    drones = solve(*parse())
+    print(sum(len(d.commandqueue) for d in drones))
+    for d in enumerate(drones):
+        for c in d.commandqueue:
+            print(d.code, c)
