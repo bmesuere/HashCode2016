@@ -20,5 +20,5 @@ def closest_warehouse_that_fulfills_needs(order, warehouses):
 
 
 def fullfills_needs(order, warehouse):
-    has_needs = all(stock - need for stock, need in zip(warehouse.stock,
-                                                        order.content))
+    return all(stock >= need
+               for stock, need in zip(warehouse.stock, order.content))
