@@ -1,7 +1,7 @@
 import heapq
 import math
 import functools
-from itertools import Counter
+from collections import Counter
 from functs import fullfills_needs
 
 
@@ -94,7 +94,7 @@ class Drone(Position):
             self.load[product] -= amount
             raise ValueError('too much load')
 
-    def clear_load(self)
+    def clear_load(self):
         self.load = Counter()
 
 
