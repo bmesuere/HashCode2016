@@ -89,8 +89,8 @@ class Drone(Position):
 
     def load_weight(self):
         from main import SETTINGS
-        return sum(amount * SETTINGS['products'][code].weight
-                   for code, amount in enumerate(self.content))
+        return sum(amount * product.weight
+                   for product, amount in self.load.items())
 
     def add_load(self, product, amount=1):
         self.load[product] += amount
