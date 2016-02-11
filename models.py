@@ -37,27 +37,41 @@ class Drone(Position):
 
     def __init__(self, r, c):
         super().__init__(r, c)
-        self.queue = []
+        self.commandqueue = []
 
-class Deliver:
+    def ends_in(self):
+
+class MovingCommand:
+    def time(self, starting_position):
+        "The time to execute given the position"
+        return 1 + math.ceil(self.position().distance(starting_position))
+
+class Deliver(MovingCommand):
     def __init__(self, order, product, count):
         self.order = order
         self.product = product
         self.count = count
+    def position(self):
+        return self.order
 
-class Load:
+class Load(MovingCommand):
     def __init__(self, warehouse, product, count):
         self.warehouse = warehouse
         self.product = product
         self.count = count
+    def position(self):
+        return self.warehouse
 
-class Unload:
+class Unload(MovingCommand):
     def __init__(self, warehouse, product, count):
         self.warehouse = warehouse
         self.product = product
         self.count = count
+    def position(self):
+        return self.warehouse
 
 class Wait:
     def __init__(self, time):
-        self.time = time
-
+        self._time = time
+    def time(self, starting_position):
+        return self._time
