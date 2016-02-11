@@ -1,6 +1,7 @@
 from collections import Counter
 from models import *
 
+SETTINGS = dict()
 
 
 def parse():
@@ -27,6 +28,11 @@ def parse():
         orders.append(Order(i, r, c, needs))
 
     order_queue = OrderQueue(n_rows, n_cols, warehouses[0], orders)
+
+    SETTINGS.update(n_rows=n_rows, n_cols=n_cols, n_turns=n_turns,
+                    max_payload=max_payload, drones=drones, products=producs,
+                    warehouse=warehouses, orders=orders,
+                    order_queue=order_queue)
 
     return (n_rows, n_cols, n_turns, max_payload, drones, products, warehouses,
             orders, order_queue)
