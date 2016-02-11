@@ -35,8 +35,8 @@ class Order(Position):
 
     def products(self):
         from main import SETTINGS
-        return dict((SETTINGS['products'][code], amount)
-                    for code, amount in enumerate(self.content))
+        return [(SETTINGS['products'][code], amount)
+                    for code, amount in enumerate(self.content)]
 
     def __lt__(self, other):
         return True
