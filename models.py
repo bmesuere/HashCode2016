@@ -19,7 +19,11 @@ class Warehouse(Position):
     def __init__(self, code, r, c, stock):
         super().__init__(r, c)
         self.code = code
-        self.stock = stock
+
+        from main import SETTINGS
+        self.stock = dict(SETTINGS['products'][code], amount)
+                          for code, amount in enumerate(self.content)]
+
 
 @functools.total_ordering
 class Order(Position):
