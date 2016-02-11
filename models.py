@@ -1,5 +1,7 @@
-
+import heapq
 import math
+import functools
+
 
 class Position:
 
@@ -12,15 +14,28 @@ class Position:
 
 class Warehouse(Position):
 
-    def __init__(self, r, c, stock):
+    def __init__(self, code, r, c, stock):
         super().__init__(r, c)
+        self.code = code
         self.stock = stock
 
+@functools.total_ordering
 class Order(Position):
 
-    def __init__(self, r, c, content):
+    def __init__(self, code, r, c, content):
         super().__init__(r, c)
+        self.code = code
         self.content = content
+
+    def __lt__(self, other):
+        return True
+
+    def __eq__(self, other):
+        return False
+
+    def __repr__(self):
+        return '(%d,%d) %s' % (self.r, self.c, self.content)
+
 
 class Product:
 
@@ -37,8 +52,9 @@ class Drone(Position):
     or the last location if it's not.
     """
 
-    def __init__(self, r, c):
+    def __init__(self, code, r, c):
         super().__init__(r, c)
+        self.code = code
         self.commandqueue = []
 
     def ends_in(self):
@@ -90,3 +106,25 @@ class Wait:
         return self._time
     def position(self):
         return None;
+
+
+class OrderQueue:
+    def __init__(self, n_rows, n_cols, base_warehouse, orders):
+        self.max_distance = (n_rows**2 + n_cols**2) ** .5
+        self.base_warehouse = base_warehouse
+        self.queue = [(self.priority(order), order) for order in orders]
+        heapq.heapify(self.queue)
+
+    def pop(self):
+        return heapq.heappop(self.queue)
+
+    def priority(self, order):
+        has_needs = all(stock - need for stock, need in
+                        zip(self.base_warehouse.stock, order.content))
+        if has_needs:
+            return order.distance(self.base_warehouse)
+
+        return self.max_distance
+
+    def __repr__(self):
+        return repr(self.queue)
